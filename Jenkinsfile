@@ -117,16 +117,16 @@ pipeline {
 
                     MONGO_POD=$(kubectl get pods -l app=mongo -o jsonpath="{.items[0].metadata.name}")
 
-                    echo "Target pod: $MONGO_POD"
+                    echo "RUN"
 
-                    # kubectl exec -it ${MONGO_POD} -- sh
-                    # exit
+                    echo "kubectl exec -it ${MONGO_POD} -- sh"
+                    echo "exit"
 
                     echo "Waiting 120 seconds for simulating the attack..."
                     sleep 120
 
                     # echo "--- Falco Logs ---"
-                    # kubectl logs -n falco -l app.kubernetes.io/name=falco --tail=50
+                    echo "kubectl logs -n falco -l app.kubernetes.io/name=falco --tail=50"
                     '''
                 }
             }
