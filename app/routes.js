@@ -1,18 +1,19 @@
 const path = require('path');
 const Todo = require('./models/todo');
 
-async function getTodos(res) {
-    try {
-        const todos = await Todo.find();
-        res.json(todos);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-}
-
 module.exports = function (app) {
 
-    // API ---------------------------------------------------------------------
+    // Helper function to get todos
+    async function getTodos(res) {
+        try {
+            const todos = await Todo.find();
+            res.json(todos);
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    }
+
+    // API routes
     app.get('/api/todos', async (req, res) => {
         await getTodos(res);
     });
@@ -38,7 +39,7 @@ module.exports = function (app) {
         }
     });
 
-    // Serve front-end ---------------------------------------------------------
+    // Serve front-end
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
     });
