@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
         - name: node-todo
-          image: node-todo:CI  # will be loaded into Minikube with this tag in pipeline
+          image: node-todo-safe   
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_URI
               valueFrom:
                 secretKeyRef:
-                  name: todo-mongo-secret
+                  name: todo-secret
                   key: MONGO_URI
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
