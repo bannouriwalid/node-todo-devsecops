@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: node-todo
-          image: walidbannouri/node-todo-safe_2:latest  
+          image: walidbannouri/node-todo-safe:latest  
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_URI
