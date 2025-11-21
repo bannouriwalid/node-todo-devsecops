@@ -13,8 +13,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/bannouriwalid/node-todo-devsecops'
-            }
+                checkout scm
         }
 
         stage('Build Docker Image') {
