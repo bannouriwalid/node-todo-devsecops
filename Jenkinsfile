@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_USER = "walidbannouri"
-        DOCKER_IMAGE_NAME = "node-todo-safe_3"
+        DOCKER_IMAGE_NAME = "node-todo-safe"
         FIXED_TAG = "latest"
         FULL_IMAGE_NAME = "${DOCKER_HUB_USER}/${DOCKER_IMAGE_NAME}:${FIXED_TAG}"
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
