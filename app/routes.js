@@ -1,47 +1,43 @@
-const Todo = require('./models/todo');
+const path = require('path');
+var Todo = require('./models/todo');
 
-async function getTodos(res) {
-    try {
-        const todos = await Todo.find();
-        res.json(todos); // return all todos in JSON format
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+function getTodos(res) {
+    Todo.find(function (err, todos) {
+        if (err) {
+            return res.send(err);
+        }
+        res.json(todos);
+    });
 }
 
 module.exports = function (app) {
 
     // api ---------------------------------------------------------------------
-    // get all todos
-    app.get('/api/todos', async (req, res) => {
-        await getTodos(res);
-    });
+    app.get('/api/todos', (req, res) => getTodos(res));
 
-    // create todo and send back all todos after creation
     app.post('/api/todos', async (req, res) => {
         try {
-            await Todo.create({
+            const todo = await Todo.create({
                 text: req.body.text,
                 done: false
             });
-            await getTodos(res); // return updated list
+            getTodos(res);
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            res.send(err);
         }
     });
 
-    // delete a todo
     app.delete('/api/todos/:todo_id', async (req, res) => {
         try {
             await Todo.deleteOne({ _id: req.params.todo_id });
-            await getTodos(res); // return updated list
+            getTodos(res);
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            res.send(err);
         }
     });
 
-    // application -------------------------------------------------------------
+    // Serve front-end ---------------------------------------------------------
     app.get('*', (req, res) => {
-        res.sendFile(__dirname + '/public/index.html'); // load the single view file
+        res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
     });
 };
