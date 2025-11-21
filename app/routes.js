@@ -1,38 +1,40 @@
 const path = require('path');
-var Todo = require('./models/todo');
+const Todo = require('./models/todo');
 
-function getTodos(res) {
-    Todo.find(function (err, todos) {
-        if (err) {
-            return res.send(err);
-        }
+async function getTodos(res) {
+    try {
+        const todos = await Todo.find();
         res.json(todos);
-    });
+    } catch (err) {
+        res.status(500).send(err);
+    }
 }
 
 module.exports = function (app) {
 
-    // api ---------------------------------------------------------------------
-    app.get('/api/todos', (req, res) => getTodos(res));
+    // API ---------------------------------------------------------------------
+    app.get('/api/todos', async (req, res) => {
+        await getTodos(res);
+    });
 
     app.post('/api/todos', async (req, res) => {
         try {
-            const todo = await Todo.create({
+            await Todo.create({
                 text: req.body.text,
                 done: false
             });
-            getTodos(res);
+            await getTodos(res);
         } catch (err) {
-            res.send(err);
+            res.status(500).send(err);
         }
     });
 
     app.delete('/api/todos/:todo_id', async (req, res) => {
         try {
             await Todo.deleteOne({ _id: req.params.todo_id });
-            getTodos(res);
+            await getTodos(res);
         } catch (err) {
-            res.send(err);
+            res.status(500).send(err);
         }
     });
 
