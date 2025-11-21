@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = "node-todo-unsafe"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                # build image locally
+                docker build -t ${DOCKER_IMAGE} -f dockerfile .
+                docker images | grep ${DOCKER_IMAGE} || true
+                '''
+            }
+        }
+
+        stage('Trivy Scan') {
+            steps {
+                sh '''
+                # Run Trivy as a container, fail CRITICAL
+                docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+                    aquasec/trivy:latest image --severity CRITICAL --exit-code 1 ${DOCKER_IMAGE} || TRIVY_EXIT=$?
+                if [ "${TRIVY_EXIT}" = "1" ]; then
+                    echo "Trivy found HIGH/CRITICAL vulnerabilities. Failing build."
+                    exit 1
+                fi
+                '''
+            }
+        }
+    }
+}
