@@ -1,3 +1,3 @@
 module.exports = {
-    localUrl: 'localUrl: process.env.MONGO_URI'
+    localUrl: process.env.MONGO_URI
 };
