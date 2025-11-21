@@ -10,38 +10,3 @@ spec:
       port: 80
       targetPort: 3000
   type: NodePort
-
-cat > /root/.kube/config << 'EOF'
-apiVersion: v1
-clusters:
-- cluster:
-    certificate-authority: /root/.minikube/.minikube/ca.crt
-    extensions:
-    - extension:
-        last-update: Fri, 21 Nov 2025 15:38:59 WAT
-        provider: minikube.sigs.k8s.io
-        version: v1.35.0
-      name: cluster_info
-    server: https://127.0.0.1:58575
-  name: minikube
-contexts:
-- context:
-    cluster: minikube
-    extensions:
-    - extension:
-        last-update: Fri, 21 Nov 2025 15:38:59 WAT
-        provider: minikube.sigs.k8s.io
-        version: v1.35.0
-      name: context_info
-    namespace: default
-    user: minikube
-  name: minikube
-current-context: minikube
-kind: Config
-preferences: {}
-users:
-- name: minikube
-  user:
-    client-certificate: /root/.minikube/.minikube/profiles/minikube/client.crt
-    client-key: /root/.minikube/.minikube/profiles/minikube/client.key
-EOF
